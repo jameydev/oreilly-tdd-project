@@ -1,0 +1,21 @@
+# ignore all by default
+*
+
+# Allow gitignore
+!.gitignore
+
+# Golang
+!/go
+!/go/*.go
+!/go/*.mod
+
+# Python
+!/py
+!/py/*.py
+
+# JavaScript
+/js/node_modules
+!/js
+!/js/*.js
+!/js/package.json
+!/js/package-lock.json
