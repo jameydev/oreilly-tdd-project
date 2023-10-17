@@ -1,26 +1,64 @@
-import { deepStrictEqual } from 'assert';
+import * as assert from 'assert';
 import colors from 'colors';
 import Money from './money.js';
 import Portfolio from './portfolio.js';
 
-let fiveDollars = new Money(5, 'USD');
-let tenDollars = new Money(10, 'USD');
-deepStrictEqual(fiveDollars.times(2), tenDollars);
-console.log('OK ... Test fiveDollars.times(2) === tenDollars; PASSED'.green);
+class MoneyTest {
+    testMultiplication() {
+        let tenEuros = new Money(10, 'EUR');
+        let twentyEuros = new Money(20, 'EUR');
+        assert.deepStrictEqual(tenEuros.times(2), twentyEuros);
+        console.log(colors.green('\u2713 OK ... testMultiplication | PASS'));
+    }
 
-let tenEuros = new Money(10, 'EUR');
-let twentyEuros = new Money(20, 'EUR');
-deepStrictEqual(tenEuros.times(2), twentyEuros);
-console.log('OK ... Test tenEuros.times(2) === twentyEuros; PASSED'.green);
+    testDivision() {
+        let originalMoney = new Money(4002, 'USD');
+        let actualMoneyAfterDivision = originalMoney.divide(4);
+        let expectedMoneyAfterDivision = new Money(1000.5, 'USD');
+        assert.deepStrictEqual(actualMoneyAfterDivision, expectedMoneyAfterDivision);
+        console.log(colors.green('\u2713 OK ... testDivision | PASS'));
+    }
 
-let originalMoney = new Money(4002, 'USD');
-let actualMoneyAfterDivision = originalMoney.divide(4);
-let expectedMoneyAfterDivision = new Money(1000.5, 'USD');
-deepStrictEqual(actualMoneyAfterDivision, expectedMoneyAfterDivision);
-console.log('OK ... Test actualMoneyAfterDivision === expectedMoneyAfterDivision; PASSED'.green);
+    testAddition() {
+        let fiveDollars = new Money(5, 'USD');
+        let tenDollars = new Money(10, 'USD');
+        let fifteenDollars = new Money(15, 'USD');
+        let portfolio = new Portfolio();
+        portfolio.add(fiveDollars, tenDollars);
+        assert.deepStrictEqual(portfolio.evaluate('USD'), fifteenDollars);
+        console.log(colors.green('\u2713 OK ... testAddition | PASS'));
+    }
 
-let fifteenDollars = new Money(15, 'USD');
-let portfolio = new Portfolio();
-portfolio.add(fiveDollars, tenDollars);
-deepStrictEqual(portfolio.evaluate('USD'), fifteenDollars);
-console.log('OK ... Test portfolio.evaluate("USD") === fifteenDollars; PASSED'.green);
+    runAllTests() {
+        const testMethods = this.getAllTestMethods();
+        testMethods.forEach(m => {
+            console.log(colors.yellow(`\nRunning Test: ${m}`));
+            let method = Reflect.get(this, m);
+            try {
+                Reflect.apply(method, this, []);
+            }
+            catch (e) {
+                if (e instanceof assert.AssertionError) {
+                    console.error(colors.red(`\u2717 FAILED ... ${m} | ${e.message}`));
+                }
+                else {
+                    throw e;
+                }
+            }
+        });
+        console.log(colors.blue('\n***======END TESTS======***\n'));
+    }
+
+    getAllTestMethods() {
+        const moneyPrototype = MoneyTest.prototype;
+        const testMethods = Object.getOwnPropertyNames(moneyPrototype)
+            .filter(prop => {
+                return typeof moneyPrototype[prop] === 'function' &&
+                    prop.startsWith('test');
+            });
+
+        return testMethods;
+    }
+}
+
+new MoneyTest().runAllTests();
