@@ -29,6 +29,16 @@ class MoneyTest {
         console.log(colors.green('\u2713 OK ... testAddition | PASS'));
     }
 
+    testAdditionOfDollarsAndEuros() {
+        let fiveDollars = new Money(5, 'USD');
+        let tenEuros = new Money(10, 'EUR');
+        let portfolio = new Portfolio();
+        portfolio.add(fiveDollars, tenEuros);
+        let expectedValue = new Money(17, 'USD');
+        assert.deepStrictEqual(portfolio.evaluate('USD'), expectedValue);
+        console.log(colors.green('\u2713 OK ... testAdditionOfDollarsAndEuros | PASS'));
+    }
+
     runAllTests() {
         const testMethods = this.getAllTestMethods();
         testMethods.forEach(m => {
