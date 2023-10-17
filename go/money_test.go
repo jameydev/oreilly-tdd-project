@@ -44,9 +44,40 @@ func TestDivision(t *testing.T) {
 	assertEqual(t, expectedMoneyAfterDivision, actualMoneyAfterDivision)
 }
 
+func TestAddition(t *testing.T) {
+	var portfolio Portfolio
+	var portfolioInDollars Money
+
+	fiveDollars := Money{amount: 5, currency: "USD"}
+	tenDollars := Money{amount: 10, currency: "USD"}
+	fifteenDollars := Money{amount: 15, currency: "USD"}
+
+	portfolio = portfolio.Add(fiveDollars)
+	portfolio = portfolio.Add(tenDollars)
+	portfolioInDollars = portfolio.Evaluate("USD")
+
+	assertEqual(t, fifteenDollars, portfolioInDollars)
+}
+
 type Money struct {
 	amount float64
 	currency string
+}
+
+type Portfolio []Money
+
+func (p Portfolio) Add(money Money) Portfolio {
+	p = append(p, money)
+	return p
+}
+
+func (p Portfolio) Evaluate(currency string) Money {
+	// Sum up all the money in the portfolio
+	total := 0.0
+	for _, money := range p {
+		total += money.amount
+	}
+	return Money{amount: total, currency: "USD"}
 }
 
 func (m Money) Times(multiplier int) Money {
