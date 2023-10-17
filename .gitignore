@@ -6,6 +6,8 @@
 
 # Golang
 !/go
+!/go/stocks
+!/go/stocks/*.go
 !/go/*.go
 !/go/*.mod
 
