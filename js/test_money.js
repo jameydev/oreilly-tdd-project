@@ -39,6 +39,16 @@ class MoneyTest {
         console.log(colors.green('\u2713 OK ... testAdditionOfDollarsAndEuros | PASS'));
     }
 
+    testAdditionOfDollarsAndWons() {
+        let oneDollar = new Money(1, 'USD');
+        let elevenHundredWon = new Money(1100, 'KRW');
+        let portfolio = new Portfolio();
+        portfolio.add(oneDollar, elevenHundredWon);
+        let expectedValue = new Money(2200, 'KRW');
+        assert.deepStrictEqual(portfolio.evaluate('KRW'), expectedValue);
+        console.log(colors.green('\u2713 OK ... testAdditionOfDollarsAndWons | PASS'));
+    }
+
     runAllTests() {
         const testMethods = this.getAllTestMethods();
         testMethods.forEach(m => {

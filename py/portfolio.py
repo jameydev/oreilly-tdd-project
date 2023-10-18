@@ -7,12 +7,13 @@ class Portfolio:
         self.moneys = []
         
     def __convert(self, money, currency):
-        eurToUsd = 1.2
+        exchangeRates = {"EUR->USD": 1.2, "USD->KRW": 1100}
         value = 1
         if money.currency == currency:
             value = money.amount
         else:
-            value = money.amount * eurToUsd
+            key = "%s->%s" % (money.currency, currency)
+            value = money.amount * exchangeRates[key]
         return value
     
     def add(self, *moneys):
